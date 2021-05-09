@@ -112,3 +112,61 @@ JWT 格式令牌的最大问题在于 “覆水难收”，也就是说，没办
 
 在不考虑用户主动取消授权的场景下，如果只考虑修改密码的情况，那么我们就可以把用户密码作为 JWT 的密钥。当然，这也是用户粒度级别的。这样一来，用户修改密码也就相当于修改了密钥。
 
+### 05 | 如何安全、快速地接入 OAuth 2.0？
+
+***构建第三方软件应用***
+
+**注册信息**
+
+研发人员提前登录到开放平台进行手动注册（app_id、app_serect、redirect_uri、申请权限等），以便后续使用这些注册的相关信息请求访问令牌。
+
+**引导授权**
+
+让用户为第三方软件授权，在得到授权之后，第三方软件才可以代表用户访问数据。
+
+**使用访问令牌**
+
+官方规范给出的使用访问令牌请求的方式有三种：
+
+Form-Encoded Body Parameter（表单参数）
+
+```http
+POST /resource HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+
+access_token=b1a64d5c-5e0c-4a70-9711-7af6568a61fb
+```
+
+URI Query Parameter（URI 查询参数）
+
+```http
+GET /resource?access_token=b1a64d5c-5e0c-4a70-9711-7af6568a61fb HTTP/1.1
+Host: server.example.com
+```
+
+Authorization Request Header Field（授权请求头部字段）
+
+```http
+GET /resource HTTP/1.1
+Host: server.example.com
+Authorization: Bearer b1a64d5c-5e0c-4a70-9711-7af6568a61fb
+```
+
+根据 OAuth 2.0 的官方建议，系统在接入 OAuth 2.0 之前信息传递的请求载体是 JSON 格式的，建议采用 Authorization 的方式来传递令牌。
+
+我建议你采用表单提交，也就是 POST 的方式来提交令牌。因为表单提交的方式在保证安全传输的同时，还不需要额外处理 Authorization 头部信息。
+
+**使用刷新令牌**
+
+一个设计良好的第三方应用，应该将 expires_in 值保存下来并定时检测；如果发现 expires_in 即将过期，则需要利用 refresh_token 去重新请求授权服务，以便获取新的、有效的访问令牌。
+
+刷新令牌是一次性的，使用之后就会失效，但是它的有效期比访问令牌长。如果刷新令牌也过期了怎么办？在这种情况下，我们需要将刷新令牌和访问令牌都放弃，相当于回到了系统的初始状态，只能让用户重新授权了。
+
+***构建受保护资源服务***
+
+不同的权限对应不同的操作
+
+不同的权限对应不同的数据
+
+不同的用户对应不同的数据
