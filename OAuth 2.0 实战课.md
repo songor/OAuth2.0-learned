@@ -204,3 +204,47 @@ response_type 的值为 token。
 ***如何选择？***
 
 ![授权许可类型](授权许可类型.jpg)
+
+### 07 | 如何在移动 App 中使用 OAuth 2.0？
+
+***没有 Server 端的 App***
+
+将一个“迷你”的 Web 服务器嵌入到 App 里面去，通过监听运行在 localhost 上的 Web 服务器 URI，就可以做到跟普通的 Web 应用一样的通信机制。当使用这种方式时，请求访问令牌时需要的 app_secret 就只能保存在用户本地设备上，app_secret 一旦被破解，将会造成灾难性的后果。
+
+![PKCE 协议流程图](PKCE 协议流程图.jpg)
+
+要生成一个随机的、长度在 43~128 字符之间的、参数为 code_verifier 的字符串验证码。
+
+怎么生成 code_challenge 的值呢？OAuth 2.0 规范里面给出了两种方法，就是看 code_challenge_method 这个参数的值：
+
+code_challenge_method=plain，此时 code_verifier 的值就是 code_challenge 的值；
+
+code_challenge_method=S256，将 code_verifier 的值进行 ASCII 编码之后再进行哈希，然后再将哈希之后的值进行 BASE64-URL 编码。
+
+第一步获取授权码 code 的时候，我们使用 code_challenge 参数：
+
+```http
+https://authorization-server.com/auth?
+response_type=code&
+app_id=APP_ID&
+redirect_uri=REDIRECT_URI&
+code_challenge=CODE_CHALLENGE&
+code_challenge_method=S256
+```
+
+第二步获取访问令牌的时候，我们使用 code_verifier 参数：
+
+```http
+https://api.authorization-server.com/token?
+grant_type=authorization_code&
+code=AUTH_CODE_HERE&
+redirect_uri=REDIRECT_URI&
+app_id=APP_ID&
+code_verifier=CODE_VERIFIER
+```
+
+在没有 app_secret 这层保护的前提下，即使我们的授权码 code 被截获，再加上 code_challenge 也同时被截获，那也没有办法由 code_challenge 逆推出 code_verifier 的值。而恰恰在第二步换取访问令牌的时候，授权服务需要的就是 code_verifier 的值。因此，这也就避免了访问令牌被恶意换取的安全问题（实际上是为了防止授权码被截获）。
+
+***有 Server 端的 App***
+
+![有 Server 端的 App](有 Server 端的 App.jpg)
