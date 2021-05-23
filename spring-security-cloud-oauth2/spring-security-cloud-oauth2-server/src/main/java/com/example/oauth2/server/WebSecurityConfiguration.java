@@ -22,7 +22,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   /**
    * 密码授权
-   * 当采用密码模式的时候，第三方应用直接提供用户名和密码
+   * 当采用密码模式的时候，客户端（第三方软件）直接提供用户名和密码
    */
   @Bean
   @Override

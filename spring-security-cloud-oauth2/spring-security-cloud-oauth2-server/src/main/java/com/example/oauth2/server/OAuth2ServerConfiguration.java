@@ -42,7 +42,7 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
   }
 
   /**
-   * 使用数据库维护客户端详情信息
+   * 使用数据库维护客户端（第三方软件）详情信息
    * 几个重要的属性：clientId、secret、scope、authorizedGrantTypes、authorities
    */
   @Override
@@ -52,13 +52,12 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
 
   /**
    * tokenKeyAccess：提供 /oauth/token_key 接口让资源服务器获取公钥
-   * checkTokenAccess：提供 /oauth/check_token 接口让资源服务器解码令牌
-   * allowFormAuthenticationForClients：允许客户端进行表单身份验证，
+   * allowFormAuthenticationForClients：允许客户端（第三方软件）进行表单身份验证，
    * 主要是让获取令牌（/oauth/token） 支持 client_id 以及 client_secret 作登录认证
    */
   @Override
   public void configure(AuthorizationServerSecurityConfigurer security) {
-    security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()")
+    security.tokenKeyAccess("permitAll()")
         .allowFormAuthenticationForClients().passwordEncoder(
         new BCryptPasswordEncoder());
   }
