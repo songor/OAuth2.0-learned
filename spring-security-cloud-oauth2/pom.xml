@@ -24,6 +24,7 @@
   <modules>
     <module>spring-security-cloud-oauth2-server</module>
     <module>spring-security-cloud-oauth2-resource</module>
+    <module>spring-security-cloud-oauth2-client</module>
   </modules>
 
   <dependencies>

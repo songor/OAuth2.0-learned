@@ -1,0 +1,33 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /ui
+
+security:
+  oauth2:
+    client:
+      client-id: authorization
+      client-secret: authorization.123
+      user-authorization-uri: http://localhost:8080/oauth/authorize
+      access-token-uri: http://localhost:8080/oauth/token
+      scope: FOO
+    resource:
+      jwt:
+        key-value: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtttZsOO84h1X+c2/JDR1
+          D5KwOuQEKiplwkTARmmu3IZitmG3KBHMbf6XjjOecOl537NQt/Fx9knlP2W4YOT8
+          6I7ArIGQza6QNj+7ganAvOe9b7f1zugCc7J9dxhdlmiTX5BhrLcBmEF9Nyu2Jebm
+          qVgQhNu6fN0x7lps//rV2giseCfwA1fY9EfYL9Aoh3B6uDg+ervHCCmBFPcFlkKV
+          hEV/GONRSe0j6S24852VxbqQVQlkFkSkTDyXUecHENVLDX25diO9fOKFTWoL1Gaw
+          bUD3NxAru55EQIkZ36p7SZ3GExWzsfxEhR0nokrCA3WRDBwnXOQP7ep8tuTEvA8u
+          HwIDAQAB
+          -----END PUBLIC KEY-----
+
+spring:
+  thymeleaf:
+    cache: false
+
+#logging:
+#  level:
+#    ROOT: debug

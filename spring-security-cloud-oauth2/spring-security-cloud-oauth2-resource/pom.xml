@@ -6,8 +6,8 @@
   <artifactId>spring-security-cloud-oauth2-resource</artifactId>
 
   <parent>
-    <artifactId>spring-security-cloud-oauth2</artifactId>
     <groupId>com.example</groupId>
+    <artifactId>spring-security-cloud-oauth2</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
