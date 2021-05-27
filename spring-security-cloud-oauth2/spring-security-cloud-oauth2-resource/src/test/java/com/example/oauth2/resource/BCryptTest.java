@@ -9,6 +9,8 @@ public class BCryptTest {
   void testBCrypt() {
     System.out.println(BCrypt.hashpw("reader.123", BCrypt.gensalt()));
     System.out.println(BCrypt.hashpw("writer.123", BCrypt.gensalt()));
+    System.out.println(BCrypt.hashpw("client.123", BCrypt.gensalt()));
+    System.out.println(BCrypt.hashpw("password.123", BCrypt.gensalt()));
     System.out.println(BCrypt.hashpw("authorization.123", BCrypt.gensalt()));
   }
 }
